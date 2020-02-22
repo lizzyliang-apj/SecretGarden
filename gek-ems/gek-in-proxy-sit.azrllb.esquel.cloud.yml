@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ing-gek-r2-proxy-sit
+  annotations:
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    traefik.ingress.kubernetes.io/preserve-host: "false"
+    traefik.ingress.kubernetes.io/redirect-regex: "^http://(.*).r2-dev.esquel.cloud/(.*)"
+    traefik.ingress.kubernetes.io/redirect-replacement: "http://$1.sit-k8s.esquel.cn/$2"
+spec:
+  rules:
+  - host: gek-ems.r2-dev.esquel.cloud
+    http:
+      paths:
+      - backend:
+          serviceName: amqp-dev-rabbitmq-ha
+          servicePort: 15672
+status:
+  loadBalancer: {}
